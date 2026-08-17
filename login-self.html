@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Login | Enterprise To-Do</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        :root {
+            --accent-light: #b300ff;
+            --accent-dark: #b300ff;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent-dark));
+        }
+
+        .btn-self {
+            background: linear-gradient(135deg, #b300ff, #e100ff);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(179, 0, 255, 0.3);
+        }
+
+        .btn-self:hover {
+            box-shadow: 0 6px 20px rgba(179, 0, 255, 0.5);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card glass-panel" style="position: relative;">
+            <h2 style="color: var(--neon-purple);">Personal Portal</h2>
+            <div id="errorBanner" class="error-banner"></div>
+
+            <form id="loginForm">
+                <div class="form-group" style="text-align: left;">
+                    <label>Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                <!-- Role hidden as SELF context -->
+                <input type="hidden" id="role" value="SELF">
+
+                <button type="submit" class="btn btn-self"
+                    style="width: 100%; justify-content: center; margin-top:20px;">
+                    Login Workspace
+                </button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" id="showRegister"
+                        style="color: var(--accent-light); text-decoration: none; font-size: 0.9em;">Need an account?
+                        Register here</a>
+                </div>
+            </form>
+
+            <form id="registerForm" style="display: none;">
+                <div class="form-group" style="text-align: left;">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" class="form-control" required>
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Email Address</label>
+                    <input type="email" id="regEmail" class="form-control" required>
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" class="form-control" required>
+                </div>
+                <!-- Role hidden as SELF context -->
+                <input type="hidden" id="regRole" value="SELF">
+
+                <button type="submit" class="btn btn-self"
+                    style="width: 100%; justify-content: center; margin-top:20px; background: var(--accent-dark);">
+                    Register Workspace
+                </button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" id="showLogin"
+                        style="color: var(--accent-light); text-decoration: none; font-size: 0.9em;">Already have an
+                        account? Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/core/api.js"></script>
+    <script src="/js/core/auth.js"></script>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegisterBtn = document.getElementById('showRegister');
+        const showLoginBtn = document.getElementById('showLogin');
+        const errorBanner = document.getElementById('errorBanner');
+        const titleEl = document.querySelector('.login-card h2');
+
+        showRegisterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            errorBanner.style.display = 'none';
+            titleEl.textContent = 'Personal Registration';
+        });
+
+        showLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            errorBanner.style.display = 'none';
+            titleEl.textContent = 'Personal Portal';
+        });
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Auth.login(
+                document.getElementById('email').value,
+                document.getElementById('password').value,
+                document.getElementById('role').value
+            );
+        });
+
+        registerForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+
+            try {
+                // Pre-clear any old errors
+                errorBanner.style.display = 'none';
+
+                // Register via Users API directly
+                await Api.post('/users', { username, email, password, role });
+
+                // Then login
+                await Auth.login(email, password, role);
+            } catch (error) {
+                errorBanner.textContent = 'Registration failed: ' + error.message;
+                errorBanner.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

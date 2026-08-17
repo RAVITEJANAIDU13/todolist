@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Base Colors - Neon Dark Theme */
+    --bg-main: #0b0f19;
+    --bg-card: rgba(22, 28, 45, 0.7);
+    --bg-glass: rgba(22, 28, 45, 0.4);
+    --text-primary: #f0f2f5;
+    --text-secondary: #94a3b8;
+    
+    /* Neon Accents based on Role or Status */
+    --neon-blue: #00f2fe;    /* Admin */
+    --neon-green: #00f260;   /* Employee / Completed */
+    --neon-purple: #b300ff;  /* Self */
+    --neon-pink: #ff0844;    /* Overdue / High Priority */
+    --neon-orange: #ff9a44;  /* Medium Priority / In Progress */
+    
+    /* Borders & Shadows */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(255, 255, 255, 0.15);
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --shadow-neon-blue: 0 0 15px rgba(0, 242, 254, 0.3);
+    
+    /* Layout */
+    --sidebar-width: 250px;
+    --header-height: 70px;
+    --border-radius-lg: 16px;
+    --border-radius-md: 10px;
+    --border-radius-sm: 6px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.04), transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(179, 0, 255, 0.04), transparent 50%);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-glass);
+}

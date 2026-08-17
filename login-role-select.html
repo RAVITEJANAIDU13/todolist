@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Role – TO-DO PRO Enterprise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: #fff;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 440px;
+      text-align: center;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.4);
+      animation: fadeUp .5s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo { font-size: 2rem; margin-bottom: 8px; }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle { font-size: .9rem; color: rgba(255,255,255,.55); margin-bottom: 36px; }
+    .user-info { margin-bottom: 32px; font-size: .95rem; color: rgba(255,255,255,.75); }
+    .user-info span { font-weight: 600; color: #a78bfa; }
+
+    .role-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      border: 1.5px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s ease;
+      text-align: left;
+    }
+
+    .role-btn:hover {
+      background: rgba(255,255,255,.12);
+      border-color: rgba(167,139,250,.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(167,139,250,.2);
+    }
+
+    .role-btn .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .role-btn.admin .icon { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .role-btn.employee .icon { background: linear-gradient(135deg, #06b6d4, #6366f1); }
+    .role-btn.self .icon { background: linear-gradient(135deg, #10b981, #3b82f6); }
+
+    .role-btn .desc { font-size: .78rem; font-weight: 400; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+    #error-msg {
+      display: none;
+      background: rgba(239,68,68,.15);
+      border: 1px solid rgba(239,68,68,.4);
+      color: #fca5a5;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: .85rem;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">⚡</div>
+  <h1>Choose Your Role</h1>
+  <p class="subtitle">Your account has multiple roles. Select how you want to continue.</p>
+  <p class="user-info" id="user-info">Logged in as <span id="username-display">—</span></p>
+
+  <div id="role-buttons"></div>
+  <div id="error-msg"></div>
+</div>
+
+<script>
+  const ROLE_META = {
+    ADMIN:    { icon: '🛡️', label: 'Continue as Admin',    desc: 'Manage users, groups, and system settings' },
+    EMPLOYEE: { icon: '💼', label: 'Continue as Employee', desc: 'View assigned tasks and collaborate with your team' },
+    SELF:     { icon: '🌟', label: 'Continue as Personal', desc: 'Access your personal task board and analytics' },
+  };
+
+  const pending = JSON.parse(sessionStorage.getItem('pendingAuth') || '{}');
+  // Guard: must have email and roles; password can be empty string (role-switch path)
+  if (!pending.email || !pending.roles || pending.roles.length === 0) {
+    window.location.href = 'index.html';
+  }
+
+  document.getElementById('username-display').textContent =
+    pending.username || pending.email || 'User';
+
+  const container = document.getElementById('role-buttons');
+  (pending.roles || []).forEach(role => {
+    const meta = ROLE_META[role] || { icon: '👤', label: role, desc: '' };
+    const btn  = document.createElement('button');
+    btn.className = `role-btn ${role.toLowerCase()}`;
+    btn.id = `btn-${role.toLowerCase()}`;
+    btn.innerHTML = `
+      <div class="icon">${meta.icon}</div>
+      <div>
+        <div>${meta.label}</div>
+        <div class="desc">${meta.desc}</div>
+      </div>`;
+    btn.addEventListener('click', () => selectRole(role));
+    container.appendChild(btn);
+  });
+
+  // Auto-click targetRole if specified (e.g. from switchRole('EMPLOYEE'))
+  if (pending.targetRole) {
+    const targetBtn = document.getElementById(`btn-${pending.targetRole.toLowerCase()}`);
+    if (targetBtn) setTimeout(() => targetBtn.click(), 120);
+  }
+
+  async function selectRole(role) {
+    const errEl = document.getElementById('error-msg');
+    errEl.style.display = 'none';
+
+    // Disable all buttons while loading
+    container.querySelectorAll('.role-btn').forEach(b => b.disabled = true);
+
+    try {
+      // Section 1 fix: If we already have a token (role-switch path), use password from pending
+      // If password is empty and no token, this is an error state
+      const loginPassword = pending.password || '';
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: pending.email, password: loginPassword, role })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err.message) || 'Login failed');
+      }
+      // Backend wraps response: { status, message, data: { token, userId, ... } }
+      const envelope = await res.json();
+      const data = envelope.data || envelope; // unwrap ApiResponse envelope
+      sessionStorage.removeItem('pendingAuth');
+
+      // ── Write the unified todo_session object that auth.js reads ──────────
+      const allRoles = data.roles
+        ? data.roles.map(r => typeof r === 'string' ? r : (r.name || r))
+        : [role];
+      const resolvedRole = data.currentRole || role;
+
+      localStorage.setItem('todo_session', JSON.stringify({
+        userId:      data.userId,
+        username:    data.username,
+        email:       data.email || pending.email,
+        role:        resolvedRole,
+        roles:       allRoles,
+        currentRole: resolvedRole,
+        token:       data.token,
+        refreshToken: data.refreshToken
+      }));
+
+      // Persist token and role independently for session restore
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('currentRole', resolvedRole);
+
+      // Navigate to the correct dashboard
+      const target = { ADMIN: '/admin.html', EMPLOYEE: '/employee.html', SELF: '/self.html' };
+      window.location.href = target[resolvedRole] || '/index.html';
+    } catch (e) {
+      errEl.textContent = e.message;
+      errEl.style.display = 'block';
+      container.querySelectorAll('.role-btn').forEach(b => b.disabled = false);
+    }
+  }
+</script>
+</body>
+</html>

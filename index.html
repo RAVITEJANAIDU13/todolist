@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoPro Enterprise — Select Role</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --neon-blue: #00f2fe;
+            --neon-purple: #b300ff;
+            --neon-green: #00f260;
+            --bg: #080b14;
+            --glass: rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.12);
+        }
+        body {
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: #fff;
+        }
+        .bg-orbs {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.18;
+            animation: float 8s ease-in-out infinite;
+        }
+        .orb-1 { width: 500px; height: 500px; background: var(--neon-blue); top: -150px; left: -150px; animation-delay: 0s; }
+        .orb-2 { width: 400px; height: 400px; background: var(--neon-purple); bottom: -100px; right: -100px; animation-delay: 3s; }
+        .orb-3 { width: 300px; height: 300px; background: var(--neon-green); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 6s; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+        .orb-3 { animation: float2 8s ease-in-out 6s infinite; }
+        @keyframes float2 { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.1); } }
+
+        .container {
+            position: relative; z-index: 1;
+            text-align: center;
+            padding: 2rem;
+        }
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+        }
+        .tagline {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-bottom: 3rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .role-grid {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .role-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            width: 220px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .role-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--card-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .role-card:hover { transform: translateY(-10px); border-color: var(--card-color); box-shadow: 0 0 40px var(--card-color)33; }
+        .role-card:hover::before { opacity: 0.08; }
+        .role-icon {
+            font-size: 3rem;
+            line-height: 1;
+            filter: drop-shadow(0 0 15px var(--card-color));
+        }
+        .role-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--card-color);
+        }
+        .role-desc {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+        .admin-card { --card-color: var(--neon-blue); }
+        .employee-card { --card-color: var(--neon-green); }
+        .self-card { --card-color: var(--neon-purple); }
+        .footer-note {
+            margin-top: 3rem;
+            color: rgba(255,255,255,0.25);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="container">
+        <div class="logo">TodoPro</div>
+        <div class="tagline">Enterprise Task Management System</div>
+        <div class="role-grid">
+            <a href="login-admin.html" class="role-card admin-card">
+                <div class="role-icon">👑</div>
+                <div class="role-title">Administrator</div>
+                <div class="role-desc">Manage teams, tasks, and monitor organization performance</div>
+            </a>
+            <a href="login-employee.html" class="role-card employee-card">
+                <div class="role-icon">💼</div>
+                <div class="role-title">Employee</div>
+                <div class="role-desc">View & complete assigned tasks, collaborate with your team</div>
+            </a>
+            <a href="login-self.html" class="role-card self-card">
+                <div class="role-icon">🎯</div>
+                <div class="role-title">Personal</div>
+                <div class="role-desc">Track personal goals, habits and boost your productivity</div>
+            </a>
+        </div>
+        <div class="footer-note">Don't have an account? <a href="register.html" style="color:var(--neon-blue); text-decoration:none;">Register here</a></div>
+    </div>
+</body>
+</html>

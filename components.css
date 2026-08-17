@@ -1,0 +1,198 @@
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: white;
+}
+
+.btn-success:hover {
+    box-shadow: 0 4px 15px rgba(0, 176, 155, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff0844, #ffb199);
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+    box-shadow: 0 4px 15px rgba(255, 8, 68, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-danger:active { transform: translateY(0); }
+
+/* Ghost button for icon actions */
+.btn-ghost {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-1px);
+}
+
+.btn-ghost:active { transform: translateY(0); }
+
+/* Small buttons (used in table action cells) */
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    border-radius: 6px;
+}
+
+/* Action column button group in tables */
+td > .btn + .btn,
+td > button + button {
+    margin-left: 4px;
+}
+
+
+/* Forms & Inputs */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.2);
+}
+
+/* Badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-low {
+    background: rgba(0, 242, 96, 0.15);
+    color: var(--neon-green);
+    border: 1px solid rgba(0, 242, 96, 0.3);
+}
+
+.badge-medium {
+    background: rgba(255, 154, 68, 0.15);
+    color: var(--neon-orange);
+    border: 1px solid rgba(255, 154, 68, 0.3);
+}
+
+.badge-high {
+    background: rgba(255, 8, 68, 0.15);
+    color: var(--neon-pink);
+    border: 1px solid rgba(255, 8, 68, 0.3);
+}
+
+.badge-completed {
+    background: rgba(0, 242, 254, 0.15);
+    color: var(--neon-blue);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+/* Tables */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.data-table th {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.data-table tr {
+    transition: background 0.2s ease;
+}
+
+.data-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Login specific layout */
+.login-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    text-align: center;
+}
+
+.login-card h2 {
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
+
+.error-banner {
+    background: rgba(255, 8, 68, 0.1);
+    border: 1px solid var(--neon-pink);
+    color: var(--neon-pink);
+    padding: 10px;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 20px;
+    display: none;
+}
